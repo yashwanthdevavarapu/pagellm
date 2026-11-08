@@ -8,7 +8,7 @@
 ![deps](https://img.shields.io/badge/runtime%20deps-numpy%20only-2a78d6)
 ![tests](https://img.shields.io/badge/tests-164%20passing-1baf7a)
 ![coverage](https://img.shields.io/badge/coverage-96%25-1baf7a)
-![license](https://img.shields.io/badge/license-MIT-52514e)
+
 
 ## Results at a glance
 
@@ -384,6 +384,3 @@ docs/             adr/, results/ (benchmark JSON and tables), assets/ (images)
 - Su et al., *RoFormer: Enhanced Transformer with Rotary Position Embedding*, 2021.
 - Ainslie et al., *GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints*, 2023.
 
-## License
-
-MIT. See [LICENSE](LICENSE).
