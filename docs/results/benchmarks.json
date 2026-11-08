@@ -1,0 +1,373 @@
+{
+  "environment": {
+    "python": "3.11.4",
+    "numpy": "2.4.6",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 140 Stepping 1, GenuineIntel",
+    "cpu_count": 8,
+    "timestamp_utc": "2026-11-08T15:34:52+00:00"
+  },
+  "quick": false,
+  "batching": {
+    "trace": {
+      "requests": 128,
+      "rate_req_s": 400.0,
+      "max_num_seqs": 16
+    },
+    "static": {
+      "requests": 128,
+      "generated_tokens": 6695,
+      "steps": 1960,
+      "makespan_s": 5.065819699666463,
+      "throughput_tok_s": 1321.6025040213735,
+      "latency_mean_s": 2.528519657604063,
+      "latency_p50_s": 2.580828360590589,
+      "latency_p99_s": 4.626764194699867,
+      "ttft_mean_s": 2.396021556084504,
+      "ttft_p99_s": 4.386772084827459,
+      "itl_mean_ms": 2.5825730157611617,
+      "itl_p99_ms": 6.261400005314499,
+      "itl_max_ms": 8.863900031428784,
+      "step_p99_ms": 7.242281970102347,
+      "preemptions": 0,
+      "max_running": 10,
+      "mean_batch": 3.4158163265306123
+    },
+    "continuous": {
+      "requests": 128,
+      "generated_tokens": 6695,
+      "steps": 511,
+      "makespan_s": 4.182180900243111,
+      "throughput_tok_s": 1600.8394088382975,
+      "latency_mean_s": 2.1577653351776984,
+      "latency_p50_s": 2.310831355650855,
+      "latency_p99_s": 3.809233657511634,
+      "ttft_mean_s": 1.68213762032188,
+      "ttft_p99_s": 3.4865500287800684,
+      "itl_mean_ms": 9.270648317579527,
+      "itl_p99_ms": 24.55641802051105,
+      "itl_max_ms": 60.00350002432242,
+      "step_p99_ms": 24.477920006029294,
+      "preemptions": 0,
+      "max_running": 16,
+      "mean_batch": 13.101761252446185
+    }
+  },
+  "memory": {
+    "pool_slots": 4096,
+    "block_size": 16,
+    "max_model_len": 256,
+    "paged_waste_pct": 7.146548936268504,
+    "contiguous_waste_pct": 61.743197521699415,
+    "paged_max_concurrent": 61,
+    "contiguous_max_concurrent": 16,
+    "paged_mean_concurrent": 22.41296928327645,
+    "kv_bytes_per_token": 2048,
+    "preemptions": 51
+  },
+  "prefix": {
+    "no_cache": {
+      "seconds": 1.2611308000050485,
+      "prefill_tokens_computed": 6765,
+      "prompt_tokens_from_cache": 0
+    },
+    "prefix_cache": {
+      "seconds": 0.5132165999966674,
+      "prefill_tokens_computed": 1005,
+      "prompt_tokens_from_cache": 5760
+    },
+    "outputs_identical": true
+  },
+  "spec": {
+    "target_params": 755072,
+    "draft_params": 54592,
+    "runs": [
+      {
+        "sampling": "greedy",
+        "k": 1,
+        "acceptance_rate": 0.6860670194003528,
+        "tokens_per_target_forward": 1.681260945709282,
+        "speedup": 1.238099695119346,
+        "baseline_s": 1.6640934000024572,
+        "spec_s": 1.3440705999382772
+      },
+      {
+        "sampling": "greedy",
+        "k": 2,
+        "acceptance_rate": 0.4636363636363636,
+        "tokens_per_target_forward": 1.9161676646706587,
+        "speedup": 1.2969661269493025,
+        "baseline_s": 1.6640934000024572,
+        "spec_s": 1.2830661999760196
+      },
+      {
+        "sampling": "greedy",
+        "k": 4,
+        "acceptance_rate": 0.3195443645083933,
+        "tokens_per_target_forward": 2.2482435597189694,
+        "speedup": 1.2038965861590067,
+        "baseline_s": 1.6640934000024572,
+        "spec_s": 1.3822561000124551
+      },
+      {
+        "sampling": "greedy",
+        "k": 6,
+        "acceptance_rate": 0.24835454146555508,
+        "tokens_per_target_forward": 2.436548223350254,
+        "speedup": 0.7851717131622966,
+        "baseline_s": 1.6640934000024572,
+        "spec_s": 2.1194006000296213
+      },
+      {
+        "sampling": "T=0.8",
+        "k": 1,
+        "acceptance_rate": 0.6848591549295775,
+        "tokens_per_target_forward": 1.681260945709282,
+        "speedup": 0.8462515543907729,
+        "baseline_s": 1.5188071000156924,
+        "spec_s": 1.7947466000332497
+      },
+      {
+        "sampling": "T=0.8",
+        "k": 2,
+        "acceptance_rate": 0.6373365041617123,
+        "tokens_per_target_forward": 2.2641509433962264,
+        "speedup": 1.4654418621851113,
+        "baseline_s": 1.5188071000156924,
+        "spec_s": 1.0364158000447787
+      },
+      {
+        "sampling": "T=0.8",
+        "k": 4,
+        "acceptance_rate": 0.4450109249817917,
+        "tokens_per_target_forward": 2.7507163323782233,
+        "speedup": 1.3144768066624872,
+        "baseline_s": 1.5188071000156924,
+        "spec_s": 1.1554461001651362
+      },
+      {
+        "sampling": "T=0.8",
+        "k": 6,
+        "acceptance_rate": 0.372737556561086,
+        "tokens_per_target_forward": 3.1893687707641196,
+        "speedup": 0.9414916622127126,
+        "baseline_s": 1.5188071000156924,
+        "spec_s": 1.6131923000211827
+      }
+    ],
+    "forward_costs_us": {
+      "target_1tok_us": 1157.5663334224373,
+      "target_5tok_us": 1807.5693332745384,
+      "draft_1tok_us": 443.6936667965104
+    }
+  },
+  "scaling": {
+    "context_tokens": 128,
+    "rows": [
+      {
+        "batch": 1,
+        "per_sequence": {
+          "ms_per_step": 1.3864249980542809,
+          "ms_per_token": 1.3864249980542809
+        },
+        "batched": {
+          "ms_per_step": 1.1112699983641505,
+          "ms_per_token": 1.1112699983641505
+        },
+        "speedup": 1.2476040927004
+      },
+      {
+        "batch": 2,
+        "per_sequence": {
+          "ms_per_step": 2.374805000727065,
+          "ms_per_token": 1.1874025003635325
+        },
+        "batched": {
+          "ms_per_step": 2.109595001093112,
+          "ms_per_token": 1.054797500546556
+        },
+        "speedup": 1.1257160732256812
+      },
+      {
+        "batch": 4,
+        "per_sequence": {
+          "ms_per_step": 2.822825001203455,
+          "ms_per_token": 0.7057062503008638
+        },
+        "batched": {
+          "ms_per_step": 2.4621150019811466,
+          "ms_per_token": 0.6155287504952867
+        },
+        "speedup": 1.1465041230535788
+      },
+      {
+        "batch": 8,
+        "per_sequence": {
+          "ms_per_step": 4.515804999391548,
+          "ms_per_token": 0.5644756249239435
+        },
+        "batched": {
+          "ms_per_step": 2.3058549995766953,
+          "ms_per_token": 0.2882318749470869
+        },
+        "speedup": 1.9584080526401495
+      },
+      {
+        "batch": 16,
+        "per_sequence": {
+          "ms_per_step": 7.0944400009466335,
+          "ms_per_token": 0.4434025000591646
+        },
+        "batched": {
+          "ms_per_step": 6.742010000743903,
+          "ms_per_token": 0.42137562504649395
+        },
+        "speedup": 1.0522737284821357
+      },
+      {
+        "batch": 32,
+        "per_sequence": {
+          "ms_per_step": 16.531655000289902,
+          "ms_per_token": 0.5166142187590594
+        },
+        "batched": {
+          "ms_per_step": 16.890725001576357,
+          "ms_per_token": 0.5278351562992611
+        },
+        "speedup": 0.978741587394683
+      }
+    ]
+  },
+  "chunked": {
+    "trace": {
+      "requests": 96,
+      "rate_req_s": 200.0,
+      "max_num_seqs": 16
+    },
+    "runs": [
+      {
+        "requests": 96,
+        "generated_tokens": 4245,
+        "steps": 296,
+        "makespan_s": 4.429166298941709,
+        "throughput_tok_s": 958.4196468338266,
+        "latency_mean_s": 2.2954528469248516,
+        "latency_p50_s": 2.329858571158714,
+        "latency_p99_s": 3.937615697321589,
+        "ttft_mean_s": 1.6314067949958648,
+        "ttft_p99_s": 3.422630425223355,
+        "itl_mean_ms": 15.36476765128531,
+        "itl_p99_ms": 47.004699998069555,
+        "itl_max_ms": 57.968499953858554,
+        "step_p99_ms": 46.497304950025864,
+        "preemptions": 0,
+        "max_running": 16,
+        "mean_batch": 14.341216216216216,
+        "label": "no chunking (budget 256)",
+        "budget": 256,
+        "chunked": false
+      },
+      {
+        "requests": 96,
+        "generated_tokens": 4245,
+        "steps": 357,
+        "makespan_s": 4.305465499928687,
+        "throughput_tok_s": 985.9561062724372,
+        "latency_mean_s": 2.270869038524989,
+        "latency_p50_s": 2.2318003722017083,
+        "latency_p99_s": 3.8127344433101733,
+        "ttft_mean_s": 1.7279464291472297,
+        "ttft_p99_s": 3.425389716495733,
+        "itl_mean_ms": 12.562200650823062,
+        "itl_p99_ms": 22.789099952206016,
+        "itl_max_ms": 25.29870002763346,
+        "step_p99_ms": 22.73657197598368,
+        "preemptions": 0,
+        "max_running": 16,
+        "mean_batch": 11.890756302521009,
+        "label": "chunked, budget 64",
+        "budget": 64,
+        "chunked": true
+      },
+      {
+        "requests": 96,
+        "generated_tokens": 4245,
+        "steps": 303,
+        "makespan_s": 3.833961900207214,
+        "throughput_tok_s": 1107.209750772581,
+        "latency_mean_s": 1.9700556320089138,
+        "latency_p50_s": 2.0254239907061136,
+        "latency_p99_s": 3.342667728586811,
+        "ttft_mean_s": 1.4009124559143527,
+        "ttft_p99_s": 3.015955416437095,
+        "itl_mean_ms": 13.168894891558894,
+        "itl_p99_ms": 28.012400027364492,
+        "itl_max_ms": 53.75610000919551,
+        "step_p99_ms": 27.915880010696146,
+        "preemptions": 0,
+        "max_running": 16,
+        "mean_batch": 14.009900990099009,
+        "label": "chunked, budget 128",
+        "budget": 128,
+        "chunked": true
+      }
+    ]
+  },
+  "http": {
+    "runs": [
+      {
+        "requests": 64,
+        "succeeded": 64,
+        "failed": 0,
+        "concurrency": 16,
+        "wall_s": 3.118370499985758,
+        "requests_per_s": 20.52353945764055,
+        "output_tok_per_s": 1328.8991798822256,
+        "ttft_ms": {
+          "p50": 37.91240000282414,
+          "p95": 159.38437500153668,
+          "p99": 161.3814770214958
+        },
+        "itl_ms": {
+          "p50": 10.051700024632737,
+          "p95": 20.395915006520227,
+          "p99": 24.225599002675153,
+          "max": 38.11470000073314
+        },
+        "e2e_ms": {
+          "p50": 765.5848500144202,
+          "p95": 1201.9189699960405,
+          "p99": 1271.0196519631427
+        },
+        "label": "no chunking"
+      },
+      {
+        "requests": 64,
+        "succeeded": 64,
+        "failed": 0,
+        "concurrency": 16,
+        "wall_s": 2.8714813999831676,
+        "requests_per_s": 22.288147156507844,
+        "output_tok_per_s": 1443.157528383883,
+        "ttft_ms": {
+          "p50": 47.15660001966171,
+          "p95": 197.73376502271273,
+          "p99": 226.3192749768495
+        },
+        "itl_ms": {
+          "p50": 9.376700036227703,
+          "p95": 14.543939975555986,
+          "p99": 16.937996007618494,
+          "max": 22.698500019032508
+        },
+        "e2e_ms": {
+          "p50": 681.2155000225175,
+          "p95": 1035.676505017909,
+          "p99": 1133.7655120121779
+        },
+        "label": "chunked, budget 64"
+      }
+    ]
+  }
+}
