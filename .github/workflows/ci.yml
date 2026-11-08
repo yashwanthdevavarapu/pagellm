@@ -55,7 +55,7 @@ jobs:
         run: pytest tests/unit tests/integration --cov --cov-report=xml --cov-report=term --cov-fail-under=90
       - name: Upload coverage report
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-xml
           path: coverage.xml
@@ -96,7 +96,7 @@ jobs:
           cd /tmp
           /tmp/wheel-venv/bin/pagellm --version
           /tmp/wheel-venv/bin/pagellm generate "ROMEO:" --max-tokens 40 --temperature 0
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: dist
           path: dist/
