@@ -1,0 +1,130 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+  PYTHONUNBUFFERED: "1"
+
+jobs:
+  lint:
+    name: Lint and type check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e ".[dev]"
+      - name: ruff check
+        run: ruff check src tests examples scripts
+      - name: ruff format
+        run: ruff format --check src tests examples scripts
+      - name: mypy
+        run: mypy
+
+  test:
+    name: Tests (${{ matrix.os }}, py${{ matrix.python-version }})
+    needs: lint
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: pip install -e ".[dev]"
+      - name: Unit and integration tests with coverage
+        run: pytest tests/unit tests/integration --cov --cov-report=xml --cov-report=term --cov-fail-under=90
+      - name: Upload coverage report
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-xml
+          path: coverage.xml
+
+  e2e:
+    name: End-to-end (${{ matrix.os }})
+    needs: lint
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e ".[dev]"
+      - name: End-to-end tests (real CLI, real weights, real HTTP)
+        run: pytest tests/e2e -v
+
+  package:
+    name: Build and verify package
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install build
+      - run: python -m build
+      - name: Install the wheel in a clean venv and smoke test it
+        run: |
+          python -m venv /tmp/wheel-venv
+          /tmp/wheel-venv/bin/pip install dist/*.whl
+          cd /tmp
+          /tmp/wheel-venv/bin/pagellm --version
+          /tmp/wheel-venv/bin/pagellm generate "ROMEO:" --max-tokens 40 --temperature 0
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  docker:
+    name: Docker image
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: pagellm:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Run the container and hit the API
+        run: |
+          docker run -d --name ts -p 8000:8000 pagellm:ci
+          for i in $(seq 1 30); do
+            curl -sf http://127.0.0.1:8000/health && break
+            sleep 1
+          done
+          curl -sf http://127.0.0.1:8000/v1/completions \
+            -H 'Content-Type: application/json' \
+            -d '{"prompt": "JULIET:\n", "max_tokens": 32, "temperature": 0}' | tee out.json
+          python3 -c "import json; r = json.load(open('out.json')); assert r['usage']['completion_tokens'] == 32"
+          curl -sf http://127.0.0.1:8000/metrics | grep pagellm_generated_tokens_total
+          docker stop ts

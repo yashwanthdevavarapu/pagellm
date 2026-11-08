@@ -1,0 +1,52 @@
+name: Benchmarks
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "quick (about 30 s) or full (several minutes)"
+        type: choice
+        options: [quick, full]
+        default: quick
+  schedule:
+    - cron: "0 6 * * 1"   # Mondays 06:00 UTC
+  pull_request:
+    paths:
+      - "src/pagellm/cache/**"
+      - "src/pagellm/engine/**"
+      - "src/pagellm/scheduling/**"
+      - "src/pagellm/model/**"
+
+permissions:
+  contents: read
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e ".[docs]"
+      - name: Run benchmarks
+        run: |
+          FLAG="--quick"
+          if [ "${{ github.event.inputs.mode }}" = "full" ]; then FLAG=""; fi
+          pagellm bench all $FLAG --json bench/benchmarks.json | tee bench/benchmarks.md
+      - name: Render charts
+        run: python scripts/make_figures.py --results bench/benchmarks.json --out bench/figures
+      - name: Publish summary
+        run: |
+          {
+            echo "## pagellm benchmarks"
+            echo
+            echo "Runner: GitHub-hosted ubuntu-latest. Wall-clock numbers depend on the runner;"
+            echo "steps, KV slots and tokens per forward are hardware independent."
+            cat bench/benchmarks.md
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: benchmarks-${{ github.run_id }}
+          path: bench/
