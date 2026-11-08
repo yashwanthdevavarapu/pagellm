@@ -1,0 +1,103 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pagellm"
+version = "1.0.0"
+description = "A vLLM-style LLM inference server built from scratch in numpy: paged KV cache, continuous batching, chunked prefill, prefix caching, speculative decoding, OpenAI-compatible streaming."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+keywords = ["llm", "inference", "serving", "paged-attention", "kv-cache", "continuous-batching", "speculative-decoding", "numpy"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = ["numpy>=1.24"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "pytest-cov>=4", "pytest-timeout>=2", "ruff>=0.6", "mypy>=1.10", "build>=1"]
+docs = ["matplotlib>=3.7"]
+
+[project.scripts]
+pagellm = "pagellm.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/yashwanthdevavarapu/pagellm"
+Repository = "https://github.com/yashwanthdevavarapu/pagellm"
+Issues = "https://github.com/yashwanthdevavarapu/pagellm/issues"
+Changelog = "https://github.com/yashwanthdevavarapu/pagellm/blob/main/CHANGELOG.md"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+pagellm = ["weights/*.npz", "data/*.txt", "py.typed"]
+
+# ---------------------------------------------------------------- pytest
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+    "e2e: end-to-end tests that launch the real CLI as a subprocess",
+    "slow: statistical tests that take more than a second",
+]
+timeout = 300
+
+[tool.coverage.run]
+source = ["pagellm"]
+branch = true
+# Subprocess coverage (e2e) is not collected; those paths are covered in-process.
+omit = ["*/__main__.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_lines = ["pragma: no cover", "if __name__ == .__main__.:", "\\.\\.\\.$"]
+
+# ---------------------------------------------------------------- ruff
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF", "N", "C4", "PIE", "PT"]
+ignore = [
+    "E741",    # `l` is the standard name for the softmax normaliser
+    "N803",    # math-style argument names (B, T, V) mirror the papers
+    "N806",
+    "RUF001", "RUF002", "RUF003",  # unicode in docstrings is intentional (math)
+    "SIM108",
+    "PT011",
+    "PT018",   # compound asserts read naturally for paired invariants
+    "C408",    # dict(...) keyword style for config presets
+    "B905",    # zip(strict=) adds a check on the hot path; lengths are equal by construction
+    "N818",    # OutOfBlocks is public API
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["B018"]
+"examples/**" = ["T201"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["pagellm"]
+
+# ---------------------------------------------------------------- mypy
+[tool.mypy]
+python_version = "3.11"
+files = ["src/pagellm"]
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+check_untyped_defs = true
+no_implicit_optional = true
